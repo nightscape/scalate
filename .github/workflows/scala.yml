@@ -2,10 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
-
+  schedule:
+    - cron: '0 5 * * *'
 jobs:
   build:
 
@@ -14,7 +13,6 @@ jobs:
     strategy:
       matrix:
         java: [8, 11]
-        Scala: ['2.11.12', '2.12.8', '2.13.2']
 
     steps:
     - uses: actions/checkout@v2
@@ -24,5 +22,5 @@ jobs:
         java-version: ${{ matrix.java }}
     - name: Run tests
       run: |
-        sbt test ++${{matrix.Scala}} test unidoc
+        sbt "+ test" "+ unidoc"
         git diff --exit-code
